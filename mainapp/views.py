@@ -1,14 +1,5 @@
 from django.views.generic import TemplateView
 
-"""
-    path('', views.HelloWorldView.as_view()),
-    path('news/', views.NewsPageView.as_view()),
-    path('courses/', views.CoursesPageView.as_view()),
-    path('contacts/', views.ContactsPageView.as_view()),
-    path('doc_style/', views.DocSitePageView.as_view()),
-    path('login/', views.LoginPageView.as_view()),
-"""
-
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -16,6 +7,16 @@ class MainPageView(TemplateView):
 
 class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
+
+    def get_context_data(self, **kwargs):
+        # Get all previous data
+        context = super().get_context_data(**kwargs)
+        # Create your own data
+        context["news_title"] = "Громкий новостной заголовок"
+        context[
+            "news_preview"
+        ] = "Предварительное описание, которое заинтересует каждого"
+        return context
 
 
 class CoursesPageView(TemplateView):
@@ -32,3 +33,4 @@ class DocSitePageView(TemplateView):
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
+    
