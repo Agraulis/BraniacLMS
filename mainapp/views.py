@@ -1,13 +1,6 @@
-from django.views.generic import TemplateView
+from datetime import datetime
 
-"""
-    path('', views.HelloWorldView.as_view()),
-    path('news/', views.NewsPageView.as_view()),
-    path('courses/', views.CoursesPageView.as_view()),
-    path('contacts/', views.ContactsPageView.as_view()),
-    path('doc_style/', views.DocSitePageView.as_view()),
-    path('login/', views.LoginPageView.as_view()),
-"""
+from django.views.generic import TemplateView
 
 
 class MainPageView(TemplateView):
@@ -16,6 +9,23 @@ class MainPageView(TemplateView):
 
 class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
+
+    def get_context_data(self, **kwargs):
+        # Get all previous data
+        context = super().get_context_data(**kwargs)
+        # Create your own data
+        context["news_title"] = "Громкий новостной заголовок"
+        context["news_preview"] = "Предварительное описание, которое заинтересует каждого"
+        context["range"] = range(5)
+        context["datetime_obj"] = datetime.now()
+        return context
+
+
+class NewsWithPaginatorView(NewsPageView):
+    def get_context_data(self, page, **kwargs):
+        context = super().get_context_data(page=page, **kwargs)
+        context["page_num"] = page
+        return context
 
 
 class CoursesPageView(TemplateView):
@@ -32,3 +42,4 @@ class DocSitePageView(TemplateView):
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
+    
