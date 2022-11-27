@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "markdownify.apps.MarkdownifyConfig",
+    "social_django",
     "mainapp",
+    "authapp",
 ]
 
 MIDDLEWARE = [
@@ -64,9 +67,12 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.example.simple_context_processor",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -85,6 +91,20 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.github.GithubOAuth2",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+SOCIAL_AUTH_GITHUB_KEY = "9b76ffe59a0e66b7de33"
+SOCIAL_AUTH_GITHUB_SECRET = "c18e5153442a202d50aaf797d57d21ac9d722884"
+
+AUTH_USER_MODEL = "authapp.CustomUser"
+
+LOGIN_REDIRECT_URL = "mainapp:main_page"
+LOGOUT_REDIRECT_URL = "mainapp:main_page"
+
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -131,3 +151,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATICFILES_DIRS = [
     BASE_DIR / "static/",
 ]
+
+# Media files
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
